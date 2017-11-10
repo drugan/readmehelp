@@ -1,0 +1,4 @@
+services:
+  readmehelp.markdown_converter:
+    class: Drupal\readmehelp\ReadmeHelpMarkdownConverter
+    arguments: ['@module_handler', '@router.request_context', '@plugin.manager.filter']

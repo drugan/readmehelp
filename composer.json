@@ -1,0 +1,21 @@
+{
+  "name": "drupal/readmehelp",
+  "type": "drupal-module",
+  "description": "Renders README file on the admin/help/your_module page",
+  "authors": [
+    {
+      "name": "Vladimir Proshin (drugan)",
+      "homepage": "https://www.drupal.org/u/drugan",
+      "role": "Maintainer"
+    }
+  ],
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/readmehelp",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/readmehelp",
+    "source": "http://cgit.drupalcode.org/readmehelp"
+  },
+  "require": { }
+}
