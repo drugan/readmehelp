@@ -55,14 +55,14 @@ class ReadmeHelpMarkdownConverter {
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
-  protected $moduleHandler;
+  public $moduleHandler;
 
   /**
    * The request context.
    *
    * @var \Drupal\Core\Routing\RequestContext
    */
-  protected $requestContext;
+  public $requestContext;
 
     /**
    * The filter plugin manager.
@@ -112,6 +112,7 @@ class ReadmeHelpMarkdownConverter {
    */
   public function convertMarkdownFile($module_name, $file = NULL) {
     $text = '';
+    $root = \Drupal::root();
     $host = $this->requestContext->getCompleteBaseUrl();
     $files = READMEHELP_FILES;
     // Allow files from directories other than a module root folder.
@@ -120,7 +121,6 @@ class ReadmeHelpMarkdownConverter {
       $dir = dirname($file);
     }
     if (isset($dir) || (is_dir($file) && $dir = $file)) {
-      $root = \Drupal::root();
       $path = str_replace($root, '', $dir);
       // Seems that $dir passed is the relative to $root one.
       if ($path == $dir) {
@@ -151,10 +151,10 @@ class ReadmeHelpMarkdownConverter {
 
     $text = $this->convertMarkdownText($text, 'en', $path);
     // The snippets should be inserted the last because Xss::filter() strips
-    // css style attribute which is inserted by PHP \highlight_file() function.
+    // css style attribute which is inserted by PHP highlight_file() function.
     // Note that output of this function is safe to print on a page because any
     // HTML tags found in the file to highlight are escaped to HTML entities.
-    $text = $this->insertPhpSnippets($text);
+    $text = $this->insertPhpSnippets($text, $root, $path);
     $name = Html::getClass($module_name);
     $readme = "<h3 class=\"readmenelp-heading\">$readme</h3>";
     $markup = "$readme<article class=\"markdown-body $name-readmehelp\">$text</article>";
@@ -219,21 +219,31 @@ class ReadmeHelpMarkdownConverter {
    * @param string $text
    *   The text string to be filtered.
    *
+   * @param string $root
+   *   The Drupal root directory.
+   *
+   * @param string $path
+   *   (optional) The relative path to the module's folder.
+   *
    * @return string
    *   The text with HTML markup.
    *
    * @see ::highlightPhp()
    */
-  public function insertPhpSnippets($text) {
-    return preg_replace_callback('{([^\s])(@PHPFILE:).*?(:PHPFILE@)}s', function ($matches) {
+  public function insertPhpSnippets($text, $root, $path = '') {
+    return preg_replace_callback('{([^\s])(@PHPFILE:).*?(:PHPFILE@)}s', function ($matches) use ($root, $path) {
       $pattern = '/(\ *@PHPFILE)|(PHPFILE@\ *)|(\ *LINE)|(\ *PADD)/';
       $match = explode(':', preg_replace($pattern, '', $matches[0]));
       $prefix = '';
-      if (isset($match[1]) && $file = trim($match[1])) {
+      if (isset($match[1]) && $file = $orig = trim($match[1])) {
         $line = isset($match[2]) ? (int) trim($match[2]) : 1;
         $padding = isset($match[3]) ? (int) trim($match[3]) : 10;
-        $file = $file[0] == '/' ? $file : \Drupal::root() . "/$file";
         $prefix = $match[0];
+        $file = $file[0] == '/' ? $file : "$root/$file";
+        if (!is_file($file)) {
+          $name = basename($orig);
+          $file = "$root/$path/$name";
+        }
       }
 
       return $prefix . $this->highlightPhp($file, $line, $padding);
@@ -270,32 +280,43 @@ class ReadmeHelpMarkdownConverter {
 
     // An example how to change css on the highlighted code.
     ini_set('highlight.comment', '#CCCCCC; font-style: oblique; color: #a48bad;');
-    $source = explode( '<br />', highlight_file($file, TRUE));
-    $index = 0;
-    $padding = $padding && is_int($padding) > 0 ? $padding : 10;
-    if ($line_number && is_int($line_number)) {
-      $line_number = $line_number - 1;
-      $index = $line_number < 0 ? 0 : $line_number;
+    $highlighted = highlight_file($file, TRUE);
+
+    $padding = is_int($padding) && $padding > 0 ? $padding : 10;
+    $valid = is_int($line_number) && $line_number > 0;
+    $line_number =  $valid ? $line_number : 0;
+    if (!$valid) {
+      $start = 0;
+      $end = 10000;
     }
     else {
-      $line_number = -1;
-      $index = 0;
-      // Just to ensure that the whole file is highlighted.
-      $padding = 10000;
+      $start = $line_number - $padding;
+      $start = $start > 0 ? $start : 1;
+      $end =  $line_number + $padding;
     }
-    $lines_to_show = ($padding * 2) + 1;
-    $lines_to_show = $lines_to_show > count($source) ? count($source) : $lines_to_show;
-    $start = ($index - $padding) < 1 ? 1 : $index - $padding;
-    $source[$index] = $line_number < 0 ? $source[$index] :
-    "<strong style='background-color:yellow'>{$source[$index]}</strong>";
-    $slice = array_slice($source, $start++, $lines_to_show);
-    $digits = strlen($start + $lines_to_show);
+    $highlighted = preg_replace('{(^<code>)|(</code>$)}s', '', $highlighted);
+    $source = explode( '<br />', $highlighted);
+    $count = count($source);
+    $code_line = NULL;
+    $number = $line = [];
 
-    foreach ($slice as $row) {
-      $code[] = '<div style="display:inline-block;color:black; width:' . $digits . 'ch; text-align:right;">' . ($start++) . '</div> ' . $row;
+    foreach ($source as $key => $value) {
+      $code_line = $key + 1;
+      if (empty($value)) {
+        $value = "<span></span>";
+      }
+      if ($code_line >= $start && $code_line <= $end && $code_line < $count) {
+        $number[$code_line] = "<span class=\"line-number\">$code_line</span>";
+        $line[$code_line] = $value;
+        if ($code_line == $line_number) {
+          $line[$code_line] = "<strong style=\"background-color:yellow\">$value</strong>";
+        }
+      }
     }
-    $php = '<div style="color: #007700">&lt;php?</div>';
-    $snippet = '<div class="highlighted-snippet">' . $php . implode('<br>', $code) . '</div>';
+
+    $numbers = implode('<br>', $number);
+    $lines = implode('<br>', $line);
+    $snippet = "<table class=\"highlighted-snippet\"><tr><td>$numbers</td><td>$lines</td></tr></table>";
 
     return $markup ? Markup::create($snippet) : $snippet;
   }
