@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Contains readmehelp_test.module.
+ */
+
+/**
+ * Tests PHP snippet.
+ */
+function test_php_snippet($arg = TRUE) {
+  echo "Test";
+}
+
+/**
+ * One more test.
+ */
+function test_php_snippet_2($arg = FALSE) {
+  echo "Test";
+  echo "Test";
+}
