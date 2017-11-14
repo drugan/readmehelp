@@ -26,10 +26,10 @@ class ReadmeHelpController extends HelpController {
     if ($depender && !$this->moduleHandler()->implementsHook($name, 'readmehelp')) {
       $converter = \Drupal::service('readmehelp.markdown_converter');
       $build['top'] = [
-      '#attached' => [
-        'library' => ['readmehelp/page'],
-      ],
-      '#markup' => $converter->convertMarkdownFile($name),
+        '#attached' => [
+          'library' => ['readmehelp/page'],
+        ],
+        '#markup' => $converter->convertMarkdownFile($name),
       ];
       return $build;
     }

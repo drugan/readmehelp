@@ -97,4 +97,3 @@ Test Snippets:
 @PHPFILE: readmehelp_test/readmehelp_test.module LINE:19 PADD:1 :PHPFILE@
 
 @PHPFILE: readmehelp_test/readmehelp_test.module :PHPFILE@
-

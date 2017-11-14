@@ -26,15 +26,15 @@ class ReadmehelpMarkdown extends FilterBase {
    * {@inheritdoc}
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
-      $form['quick_tips'] = [
-        '#type' => 'item',
-        '#title' => $this->t('Quick tips'),
-        '#description' => $this->t('You can use <a href=":readmehelp" name=":name">markdown syntax</a> like in README files to format and style the text. This syntax is a subset of the <a href=":github">Github Flavoured Markdown</a>. Note that this filter will always be kept at the top. After the filter it is recommended to place "Convert line breaks into HTML" and "Limit allowed HTML tags and correct faulty HTML" filters. The tags that should be allowed for proper working of the markdown filter are the following: &lt;a href hreflang&gt; &lt;em&gt; &lt;strong&gt; &lt;cite&gt; &lt;blockquote cite&gt; &lt;code&gt; &lt;ul type&gt; &lt;ol start type&gt; &lt;li&gt; &lt;h1 id&gt; &lt;h2 id&gt; &lt;h3 id&gt; &lt;h4 id&gt; &lt;h5 id&gt; &lt;h6 id&gt; &lt;p&gt; &lt;br&gt; &lt;pre&gt; &lt;hr&gt; &lt;img src alt data-entity-type data-entity-uuid&gt;. When using this filter with the CKEditor you need to press [Source] button on the editor while editing the markdown text. This is because markdown symbols are actually the source code similar to HTML tags. It is recommended to use this filter without any Rich Text Editor enabled on a text format.', [
-          ':readmehelp' => Url::fromRoute('help.page', ['name' => $this->provider])->toString(),
-          ':github' => 'https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet',
-          ':name' => 'readmehelp-filter',
-        ]),
-      ];
+    $form['quick_tips'] = [
+      '#type' => 'item',
+      '#title' => $this->t('Quick tips'),
+      '#description' => $this->t('You can use <a href=":readmehelp" name=":name">markdown syntax</a> like in README files to format and style the text. This syntax is a subset of the <a href=":github">Github Flavoured Markdown</a>. Note that this filter will always be kept at the top. After the filter it is recommended to place "Convert line breaks into HTML" and "Limit allowed HTML tags and correct faulty HTML" filters. The tags that should be allowed for proper working of the markdown filter are the following: &lt;a href hreflang&gt; &lt;em&gt; &lt;strong&gt; &lt;cite&gt; &lt;blockquote cite&gt; &lt;code&gt; &lt;ul type&gt; &lt;ol start type&gt; &lt;li&gt; &lt;h1 id&gt; &lt;h2 id&gt; &lt;h3 id&gt; &lt;h4 id&gt; &lt;h5 id&gt; &lt;h6 id&gt; &lt;p&gt; &lt;br&gt; &lt;pre&gt; &lt;hr&gt; &lt;img src alt data-entity-type data-entity-uuid&gt;. When using this filter with the CKEditor you need to press [Source] button on the editor while editing the markdown text. This is because markdown symbols are actually the source code similar to HTML tags. It is recommended to use this filter without any Rich Text Editor enabled on a text format.', [
+        ':readmehelp' => Url::fromRoute('help.page', ['name' => $this->provider])->toString(),
+        ':github' => 'https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet',
+        ':name' => 'readmehelp-filter',
+      ]),
+    ];
 
     return $form;
   }
@@ -62,10 +62,10 @@ class ReadmehelpMarkdown extends FilterBase {
    */
   public function tips($long = FALSE) {
     return $this->t('You can use <a href=":readmehelp" name=":name">markdown syntax</a> like in README files to format and style the text. This syntax is a subset of the <a href=":github">Github Flavoured Markdown</a>.', [
-        ':readmehelp' => Url::fromRoute('help.page', ['name' => $this->provider])->toString(),
-        ':github' => 'https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet',
-        ':name' => 'readmehelp-filter',
-      ]);
+      ':readmehelp' => Url::fromRoute('help.page', ['name' => $this->provider])->toString(),
+      ':github' => 'https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet',
+      ':name' => 'readmehelp-filter',
+    ]);
   }
 
   /**
@@ -75,7 +75,7 @@ class ReadmehelpMarkdown extends FilterBase {
     if (!empty($text)) {
       $request = \Drupal::request();
       $path = $request->getPathInfo();
-      $host= str_replace($path, '', $request->getUri());
+      $host = str_replace($path, '', $request->getUri());
       $path = $file_path ? trim($file_path, '/') : trim($path, '/');
 
       $text = $text . "\n";
@@ -222,18 +222,18 @@ class ReadmehelpMarkdown extends FilterBase {
   public function convertLeadingDashSpace($text) {
     return preg_replace_callback('/(?(DEFINE)(?<emptyline>(\n\n)))((\n- )(.*?))(?&emptyline)/s',
     function ($matches) {
-    $match = '';
-    if ($match = !empty($matches[0]) ? $matches[0] : '') {
-      $items = '';
-      foreach (explode('- ', $match) as $item) {
-        if ($item = trim($item)) {
-           $items .= "<li>$item</li>";
+      $match = '';
+      if ($match = !empty($matches[0]) ? $matches[0] : '') {
+        $items = '';
+        foreach (explode('- ', $match) as $item) {
+          if ($item = trim($item)) {
+             $items .= "<li>$item</li>";
+          }
         }
+        $match = $items ? "\n<ul>$items</ul>\n" : $match;
       }
-      $match = $items ? "\n<ul>$items</ul>\n" : $match;
-    }
 
-    return $match;
+      return $match;
     }, $text);
   }
 
@@ -249,20 +249,19 @@ class ReadmehelpMarkdown extends FilterBase {
   public function convertLeadingNumberDotSpace($text) {
     return preg_replace_callback('/(?(DEFINE)(?<emptyline>(\n\n)))(\n\d\.\ )(.*?)(?&emptyline)/s',
     function ($matches) {
-    $match = '';
-    if ($match = !empty($matches[0]) ? $matches[0] : '') {
-      $match = preg_replace('/(^|\n)\d\.\ /s', '<LISTITEM>', $match);
-      $list = '<ol>';
-      $items = '';
-      foreach (explode('<LISTITEM>', $match) as $item) {
-        if ($item = trim($item)) {
-           $items .= "<li>$item</li>";
+      $match = '';
+      if ($match = !empty($matches[0]) ? $matches[0] : '') {
+        $match = preg_replace('/(^|\n)\d\.\ /s', '<LISTITEM>', $match);
+        $items = '';
+        foreach (explode('<LISTITEM>', $match) as $item) {
+          if ($item = trim($item)) {
+             $items .= "<li>$item</li>";
+          }
         }
+        $match = $items ? "\n<ol>$items</ol>\n" : $match;
       }
-      $match = $items ? "\n<ol>$items</ol>\n" : $match;
-    }
 
-    return $match;
+      return $match;
     }, $text);
   }
 
@@ -281,19 +280,19 @@ class ReadmehelpMarkdown extends FilterBase {
    */
   public function convertLeadingGreaterThanSign($text) {
     return preg_replace_callback('/(?(DEFINE)(?<emptyline>(\n\n)))(\n>>? )(\w.*?)(?&emptyline)/s', function ($matches) {
-    $match = '';
-    if ($match = !empty($matches[4]) ? preg_replace('/\n>>? /', '', $matches[4]) : '') {
-      $id = trim(Html::getUniqueId(Unicode::truncate($match, 32, TRUE)), '-');
-      if (trim($matches[3]) == '>>') {
-        $tag = 'cite';
-        $sign = '>> ';
+      $match = '';
+      if ($match = !empty($matches[4]) ? preg_replace('/\n>>? /', '', $matches[4]) : '') {
+        $id = trim(Html::getUniqueId(Unicode::truncate($match, 32, TRUE)), '-');
+        if (trim($matches[3]) == '>>') {
+          $tag = 'cite';
+          $sign = '>> ';
+        }
+        else {
+          $tag = 'blockquote';
+          $sign = '> ';
+        }
+        $match = "\n<$tag><a id=\"$id\" href=\"#$id\" class=\"anchor\">$sign</a>$match</$tag>\n";
       }
-      else {
-        $tag = 'blockquote';
-        $sign = '> ';
-      }
-      $match = "\n<$tag><a id=\"$id\" href=\"#$id\" class=\"anchor\">$sign</a>$match</$tag>\n";
-    }
       return $match;
     }, $text);
   }
@@ -365,7 +364,7 @@ class ReadmehelpMarkdown extends FilterBase {
       $j = $i > 1 ? '\n' . $hash : '^' . $hash;
 
       $text = preg_replace_callback('/' . $j . '(\s+\w.*?)\n/',
-      function ($matches) use ($i, $hash) {
+      function ($matches) use ($i) {
         if ($match = !empty($matches[1]) ? rtrim($matches[1]) : '') {
           $id = trim(Html::getUniqueId($match), '-');
           $match = "<h$i><a id=\"$id\" href=\"#$id\" class=\"anchor\">#</a>$match</h$i>";
@@ -394,19 +393,19 @@ class ReadmehelpMarkdown extends FilterBase {
     $pattern = '/(\n\n)(\-\-\-+\n+)|(\*\*\*+\n+)|(\_\_\_+\n+)(\n)/xs';
 
     return preg_replace_callback($pattern, function ($matches) {
-    $match = '';
-    if ($match = !empty($matches[0]) ? $matches[0] : '') {
-      if (strstr($match, '___')) {
-        $class = 'underscore';
+      $match = '';
+      if ($match = !empty($matches[0]) ? $matches[0] : '') {
+        if (strstr($match, '___')) {
+          $class = 'underscore';
+        }
+        elseif (strstr($match, '***')) {
+          $class = 'asterisk';
+        }
+        else {
+          $class = 'dash';
+        }
+        $match = "\n\n<hr class=\"$class\">\n\n";
       }
-      elseif (strstr($match, '***')) {
-        $class = 'asterisk';
-      }
-      else {
-        $class = 'dash';
-      }
-      $match = "\n\n<hr class=\"$class\">\n\n";
-    }
       return $match;
     }, $text);
   }
@@ -422,10 +421,10 @@ class ReadmehelpMarkdown extends FilterBase {
    */
   public function convertSingleAsterisk($text) {
     return preg_replace_callback('/(\*[^*]*?\*)/', function ($matches) {
-    $match = '';
-    if ($match = !empty($matches[0]) ? $matches[0] : '') {
-      $match = "<em>" . str_replace('*', '', $match) . "</em>";
-    }
+      $match = '';
+      if ($match = !empty($matches[0]) ? $matches[0] : '') {
+        $match = "<em>" . str_replace('*', '', $match) . "</em>";
+      }
       return $match;
     }, $text);
   }
@@ -441,10 +440,10 @@ class ReadmehelpMarkdown extends FilterBase {
    */
   public function convertDoubleAsterisk($text) {
     return preg_replace_callback('/(\*\*[^*]*?\*\*)/', function ($matches) {
-    $match = '';
-    if ($match = !empty($matches[0]) ? $matches[0] : '') {
-      $match = "<strong>" . str_replace('*', '', $match) . "</strong>";
-    }
+      $match = '';
+      if ($match = !empty($matches[0]) ? $matches[0] : '') {
+        $match = "<strong>" . str_replace('*', '', $match) . "</strong>";
+      }
       return $match;
     }, $text);
   }
@@ -460,11 +459,11 @@ class ReadmehelpMarkdown extends FilterBase {
    */
   public function convertSingleUnderscore($text) {
     return preg_replace_callback('/(\s)(_[^_]*?_)/', function ($matches) {
-    $match = '';
-    if ($match = !empty($matches[2]) ? $matches[2] : '') {
-      $char = isset($matches[3]) ? $matches[3] : '';
-      $match = "$matches[1]<em>" . str_replace('_', '', $match) . "</em>$char";
-    }
+      $match = '';
+      if ($match = !empty($matches[2]) ? $matches[2] : '') {
+        $char = isset($matches[3]) ? $matches[3] : '';
+        $match = "$matches[1]<em>" . str_replace('_', '', $match) . "</em>$char";
+      }
       return $match;
     }, $text);
   }
@@ -480,11 +479,11 @@ class ReadmehelpMarkdown extends FilterBase {
    */
   public function convertDoubleUnderscore($text) {
     return preg_replace_callback('/(\s)(__[^_]*?__)/', function ($matches) {
-    $match = '';
-    if ($match = !empty($matches[2]) ? $matches[2] : '') {
-      $char = isset($matches[3]) ? $matches[3] : '';
-      $match = "$matches[1]<strong>" . str_replace('_', '', $match) . "</strong>$char";
-    }
+      $match = '';
+      if ($match = !empty($matches[2]) ? $matches[2] : '') {
+        $char = isset($matches[3]) ? $matches[3] : '';
+        $match = "$matches[1]<strong>" . str_replace('_', '', $match) . "</strong>$char";
+      }
       return $match;
     }, $text);
   }
@@ -500,10 +499,10 @@ class ReadmehelpMarkdown extends FilterBase {
    */
   public function convertSingleBacktick($text) {
     return preg_replace_callback('/`[^`]*?[^`]`/', function ($matches) {
-    $match = '';
-    if ($match = !empty($matches[0]) ? $matches[0] : '') {
-      $match = "<code class=\"code--singleline\">" . str_replace('`', '', $match) . "</code>";
-    }
+      $match = '';
+      if ($match = !empty($matches[0]) ? $matches[0] : '') {
+        $match = "<code class=\"code--singleline\">" . str_replace('`', '', $match) . "</code>";
+      }
       return $match;
     }, $text);
   }
@@ -520,10 +519,10 @@ class ReadmehelpMarkdown extends FilterBase {
    */
   public function convertTripleBacktick($text) {
     return preg_replace_callback('/(```\w*)[^`].*?[^`](```)/xs', function ($matches) {
-    $match = '';
-    if ($match = !empty($matches[2]) ? $matches[0] : '') {
-      $match = "<pre><code class=\"code--multiline\">" . str_replace([$matches[1], $matches[2]], '', $match) . "</code></pre>";
-    }
+      $match = '';
+      if ($match = !empty($matches[2]) ? $matches[0] : '') {
+        $match = "<pre><code class=\"code--multiline\">" . str_replace([$matches[1], $matches[2]], '', $match) . "</code></pre>";
+      }
       return $match;
     }, $text);
   }
@@ -551,10 +550,8 @@ class ReadmehelpMarkdown extends FilterBase {
    *
    * @param string $text
    *   The string to be filtered.
-   *
    * @param string $host
    *   (optional) The base URL of a site, like: http(s)://example.com.
-   *
    * @param string $path
    *   (optional) The path part of the URL, like: modules/contrib/my_module.
    *
@@ -571,9 +568,9 @@ class ReadmehelpMarkdown extends FilterBase {
       $url = $matches[3] == '' ? $matches[4] : $matches[3];
       $title = empty($matches[7]) ? $alt : $matches[7];
       $src = "$host/$path/$url";
-	    if (preg_match('/^http/', $url)) {
+      if (preg_match('/^http/', $url)) {
         $src = $url;
-	    }
+      }
       return "<img src=\"$src\" alt=\"$alt\" title=\"$title\" class=\"markdown-image\" />";
     }, $text);
   }
@@ -597,7 +594,6 @@ class ReadmehelpMarkdown extends FilterBase {
    *
    * @param string $text
    *   The string to be filtered.
-   *
    * @param string $host
    *   (optional) The base URL of a site, like: http(s)://example.com.
    *
@@ -608,22 +604,22 @@ class ReadmehelpMarkdown extends FilterBase {
     $pattern = '/(\[((?>[^\[\]]+|\[\])*)\]\([ \n]*(?:<(.+?)>|((?>[^()\s]+|\((?>\)))*))[ \n]*(([\'"])(.*?)\6[ \n]*)?\))/xs';
 
     return preg_replace_callback($pattern, function ($matches) use ($host) {
-	    $text	= $matches[2];
+      $text  = $matches[2];
       $parts = explode('?', $text);
-      $text = isset($parts[0]) ? $parts[0] : 'NOT-A-TEXT';
-	    $url = $matches[3] == '' ? $matches[4] : $matches[3];
+      $text  = isset($parts[0]) ? $parts[0] : 'NOT-A-TEXT';
+      $url   = $matches[3] == '' ? $matches[4] : $matches[3];
       $parts = explode('?', $url);
-      $url = isset($parts[0]) ? $parts[0] : 'NOT-A-URL';
-	    $title = empty($matches[7]) ? $text : $matches[7];
-	    if (preg_match('{^.*[#].*}', $text)) {
-	      $parts = explode('?', $text);
-	      $url = "$host/$parts[0]";
-	      $text = $title;
-	    }
-	    elseif (!preg_match('/^http/', $url)) {
-	      $url = "$host/$text";
-	    }
-	    return " <a href=\"$url\" title=\"$title\" class=\"markdown-link\">$text</a> ";
+      $url   = isset($parts[0]) ? $parts[0] : 'NOT-A-URL';
+      $title = empty($matches[7]) ? $text : $matches[7];
+      if (preg_match('{^.*[#].*}', $text)) {
+        $parts = explode('?', $text);
+        $url = "$host/$parts[0]";
+        $text = $title;
+      }
+      elseif (!preg_match('/^http/', $url)) {
+        $url = "$host/$text";
+      }
+      return "<a href=\"$url\" title=\"$title\" class=\"markdown-link\">$text</a>";
     }, $text);
   }
 

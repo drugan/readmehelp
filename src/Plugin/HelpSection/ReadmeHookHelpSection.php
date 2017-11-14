@@ -4,6 +4,7 @@ namespace Drupal\readmehelp\Plugin\HelpSection;
 
 use Drupal\Core\Link;
 use Drupal\help\Plugin\HelpSection\HookHelpSection;
+use Drupal\readmehelp\ReadmeHelpInterface;
 
 /**
  * Provides the module topics list section for the help page.
@@ -14,7 +15,7 @@ use Drupal\help\Plugin\HelpSection\HookHelpSection;
  *   description = @Translation("Module overviews are provided by modules. Overviews available for your installed modules:"),
  * )
  */
-class ReadmeHookHelpSection extends HookHelpSection {
+class ReadmeHookHelpSection extends HookHelpSection implements ReadmeHelpInterface {
 
   /**
    * {@inheritdoc}
@@ -28,7 +29,7 @@ class ReadmeHookHelpSection extends HookHelpSection {
       $file = FALSE;
       $self = $name == 'readmehelp';
       if (in_array('readmehelp', system_get_info('module', $name)['dependencies']) || $self) {
-        foreach (explode(', ', READMEHELP_FILES) as $readme) {
+        foreach (explode(', ', static::READMEHELP_FILES) as $readme) {
           if ($file = file_exists("$dirs[$name]/$readme")) {
             break;
           }

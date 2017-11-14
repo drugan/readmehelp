@@ -3,7 +3,6 @@
 namespace Drupal\Tests\readmehelp\Functional;
 
 use Drupal\Tests\BrowserTestBase;
-use Drupal\Component\Utility\Xss;
 
 /**
  * Tests markdown into markup conversion.
@@ -32,7 +31,7 @@ class ReadmeHelpTest extends BrowserTestBase {
   protected $adminUser;
 
   /**
-   * {@inheritoc}
+   * {@inheritdoc}
    */
   protected function setUp() {
     parent::setUp();

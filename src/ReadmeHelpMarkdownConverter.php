@@ -13,12 +13,14 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 /**
  * Default implementation of the ReadmeHelpMarkdownConverter.
  */
-class ReadmeHelpMarkdownConverter {
+class ReadmeHelpMarkdownConverter implements ReadmeHelpInterface {
 
   use StringTranslationTrait;
 
   /**
    * The allowed tags.
+   *
+   * @var array
    */
   protected $tags = [
     'a',
@@ -64,7 +66,14 @@ class ReadmeHelpMarkdownConverter {
    */
   public $requestContext;
 
-    /**
+  /**
+   * The app root.
+   *
+   * @var string
+   */
+  public $root;
+
+  /**
    * The filter plugin manager.
    *
    * @var \Drupal\Component\Plugin\PluginManagerInterface
@@ -74,15 +83,20 @@ class ReadmeHelpMarkdownConverter {
   /**
    * Constructs a new ReadmeHelpMarkdownConverter object.
    *
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
    * @param \Drupal\Core\Routing\RequestContext $request_context
    *   The request context.
+   * @param \Drupal\Component\Plugin\PluginManagerInterface $filter_manager
+   *   The filter manager.
+   * @param string $app_root
+   *   The app root.
    */
-  public function __construct(ModuleHandlerInterface $module_handler, RequestContext $request_context, PluginManagerInterface $filter_manager) {
+  public function __construct(ModuleHandlerInterface $module_handler, RequestContext $request_context, PluginManagerInterface $filter_manager, $app_root) {
     $this->moduleHandler = $module_handler;
     $this->requestContext = $request_context;
     $this->filterManager = $filter_manager;
+    $this->root = $app_root;
   }
 
   /**
@@ -112,9 +126,8 @@ class ReadmeHelpMarkdownConverter {
    */
   public function convertMarkdownFile($module_name, $file = NULL) {
     $text = '';
-    $root = \Drupal::root();
-    $host = $this->requestContext->getCompleteBaseUrl();
-    $files = READMEHELP_FILES;
+    $root = $this->root;
+    $files = static::READMEHELP_FILES;
     // Allow files from directories other than a module root folder.
     if (is_file($file)) {
       $files = ', ' . basename($file);
@@ -145,7 +158,7 @@ class ReadmeHelpMarkdownConverter {
       return $this->t('None of the %files files is found in the %dir folder or their content is empty. Please, <a href=":href">README</a>.', [
         '%files' => $files,
         '%dir' => $dir,
-        ':href' => \Drupal::url('help.page', ['name'=>'readmehelp']),
+        ':href' => \Drupal::url('help.page', ['name' => 'readmehelp']),
       ]);
     }
 
@@ -170,7 +183,7 @@ class ReadmeHelpMarkdownConverter {
    * @param string $language
    *   The language code to use for filtering.
    * @param string $file_path
-   *   The path to a module's directory. Example: modules/contrib/my_module
+   *   The path to a module's directory. Example: modules/contrib/my_module.
    *
    * @return string
    *   The text with HTML markup.
@@ -218,10 +231,6 @@ class ReadmeHelpMarkdownConverter {
    *
    * @param string $text
    *   The text string to be filtered.
-   *
-   * @param string $root
-   *   The Drupal root directory.
-   *
    * @param string $path
    *   (optional) The relative path to the module's folder.
    *
@@ -230,7 +239,8 @@ class ReadmeHelpMarkdownConverter {
    *
    * @see ::highlightPhp()
    */
-  public function insertPhpSnippets($text, $root, $path = '') {
+  public function insertPhpSnippets($text, $path = '') {
+    $root = $this->root;
     return preg_replace_callback('{([^\s])(@PHPFILE:).*?(:PHPFILE@)}s', function ($matches) use ($root, $path) {
       $pattern = '/(\ *@PHPFILE)|(PHPFILE@\ *)|(\ *LINE)|(\ *PADD)/';
       $match = explode(':', preg_replace($pattern, '', $matches[0]));
@@ -255,13 +265,10 @@ class ReadmeHelpMarkdownConverter {
    *
    * @param string $file
    *   The absolute path to the file.
-   *
    * @param int $line_number
    *   The line number to put in the middle of the snippet.
-   *
    * @param int $padding
    *   The number of lines to add before and after the $line_number.
-   *
    * @param bool $markup
    *   Whether to return the markup object instead of a string.
    *
@@ -284,7 +291,7 @@ class ReadmeHelpMarkdownConverter {
 
     $padding = is_int($padding) && $padding > 0 ? $padding : 10;
     $valid = is_int($line_number) && $line_number > 0;
-    $line_number =  $valid ? $line_number : 0;
+    $line_number = $valid ? $line_number : 0;
     if (!$valid) {
       $start = 0;
       $end = 10000;
@@ -292,10 +299,10 @@ class ReadmeHelpMarkdownConverter {
     else {
       $start = $line_number - $padding;
       $start = $start > 0 ? $start : 1;
-      $end =  $line_number + $padding;
+      $end = $line_number + $padding;
     }
     $highlighted = preg_replace('{(^<code>)|(</code>$)}s', '', $highlighted);
-    $source = explode( '<br />', $highlighted);
+    $source = explode('<br />', $highlighted);
     $count = count($source);
     $code_line = NULL;
     $number = $line = [];
