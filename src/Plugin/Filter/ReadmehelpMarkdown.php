@@ -230,7 +230,7 @@ class ReadmehelpMarkdown extends FilterBase {
              $items .= "<li>$item</li>";
           }
         }
-        $match = $items ? "\n<ul>$items</ul>\n" : $match;
+        $match = $items ? "\n<ul class=\"ul\">$items</ul>\n" : $match;
       }
 
       return $match;
@@ -258,7 +258,7 @@ class ReadmehelpMarkdown extends FilterBase {
              $items .= "<li>$item</li>";
           }
         }
-        $match = $items ? "\n<ol>$items</ol>\n" : $match;
+        $match = $items ? "\n<ol class=\"ol\">$items</ol>\n" : $match;
       }
 
       return $match;
@@ -404,7 +404,7 @@ class ReadmehelpMarkdown extends FilterBase {
         else {
           $class = 'dash';
         }
-        $match = "\n\n<hr class=\"$class\">\n\n";
+        $match = "\n\n<hr class=\"hr-$class\">\n\n";
       }
       return $match;
     }, $text);

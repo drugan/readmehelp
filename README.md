@@ -185,7 +185,7 @@ Relative Path:
 
 Absolute Path:
 
-!\[ALT Text](https://raw.githubusercontent.com/drugan/readmehelp/master/images/drupalcat.png
+!\[ALT Text](https://raw.githubusercontent.com/drugan/readmehelp/8.x-1.x/images/drupalcat.png
 "On Hover Title")
 
 `...converted into:`
