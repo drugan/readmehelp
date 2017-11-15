@@ -190,7 +190,7 @@ Absolute Path:
 
 `...converted into:`
 
-![ALT Text](https://raw.githubusercontent.com/drugan/readmehelp/master/images/drupalcat.png
+![ALT Text](https://raw.githubusercontent.com/drugan/readmehelp/8.x-1.x/images/drupalcat.png
 "On Hover Title")
 
 > See origin of the above image: https://octodex.github.com/images/drupalcat.jpg
