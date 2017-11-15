@@ -168,7 +168,7 @@ Absolute path:
 [PHP](http://php.net/ "On Hover Title")
 
 ```
-Note that all raw text links, like http://php.net will be converted into:
+Note that any raw text url, like http://php.net will be converted into:
 ```
 http://php.net
 
@@ -177,21 +177,21 @@ http://php.net
 
 Relative Path:
 
-!\[ALT Text]\(images/druplicon.png "Hover Title")
+!\[ALT Text]\(images/druplicon.png "On Hover Title")
 
 `...converted into:`
 
-![ALT Text](images/druplicon.png "Hover Title")
+![ALT Text](images/druplicon.png "On Hover Title")
 
 Absolute Path:
 
 !\[ALT Text](https://raw.githubusercontent.com/drugan/readmehelp/master/images/drupalcat.png
-"Hover Title")
+"On Hover Title")
 
 `...converted into:`
 
 ![ALT Text](https://raw.githubusercontent.com/drugan/readmehelp/master/images/drupalcat.png
-"Hover Title")
+"On Hover Title")
 
 > See origin of the above image: https://octodex.github.com/images/drupalcat.jpg
 
@@ -319,6 +319,12 @@ to construct a token like the following:
 @PHPFILE: modules/contrib/readmehelp/readmehelp.module LINE:28 PADD:7 :PHPFILE@
 ```
 
+`...or just:`
+
+```
+@PHPFILE: readmehelp.module LINE:28 PADD:7 :PHPFILE@
+```
+
 > The absolute or relative path to a file may be followed by a **LINE** number
 argument and **PADD**, which is the number of lines to add before and after
 the **LINE** (additionally highlighted with yellow color). Both arguments are
@@ -330,7 +336,7 @@ the [github.com](https://github.com/drugan/readmehelp#dynamic-php-snippets
 
 ********************************************************************************
 
-@PHPFILE: modules/contrib/readmehelp/readmehelp.module LINE:28 PADD:7 :PHPFILE@
+@PHPFILE: readmehelp.module LINE:28 PADD:7 :PHPFILE@
 
 ********************************************************************************
 
@@ -339,8 +345,8 @@ the [github.com](https://github.com/drugan/readmehelp#dynamic-php-snippets
 *README Help* module has its own [filter/tips#readmehelp-filter](#0
 "markdown text filter") which could be used for creating
 [admin/config/content/formats#](#0 " Drupal text formats"). So, users can
-implement easy to remember syntax for making their posts a bit richer while not
-able to harm a site, whether intentionally or not.
+implement easy to remember syntax for making their posts richer while not able
+to harm a site, whether intentionally or not.
 
 > Note that no any of the external libraries are used by the filter.
 
@@ -357,7 +363,7 @@ and edit for your needs.
 
 ********************************************************************************
 
-@PHPFILE: modules/contrib/readmehelp/readmehelp.module LINE:62 PADD:25 :PHPFILE@
+@PHPFILE: readmehelp.module LINE:62 PADD:25 :PHPFILE@
 
 ********************************************************************************
 

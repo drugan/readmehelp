@@ -167,7 +167,7 @@ class ReadmeHelpMarkdownConverter implements ReadmeHelpInterface {
     // css style attribute which is inserted by PHP highlight_file() function.
     // Note that output of this function is safe to print on a page because any
     // HTML tags found in the file to highlight are escaped to HTML entities.
-    $text = $this->insertPhpSnippets($text, $root, $path);
+    $text = $this->insertPhpSnippets($text, $path);
     $name = Html::getClass($module_name);
     $readme = "<h3 class=\"readmenelp-heading\">$readme</h3>";
     $markup = "$readme<article class=\"markdown-body $name-readmehelp\">$text</article>";
@@ -282,7 +282,7 @@ class ReadmeHelpMarkdownConverter implements ReadmeHelpInterface {
   public function highlightPhp($file, $line_number, $padding, $markup = FALSE) {
 
     if (!$file || !is_readable($file)) {
-      return "CAN'T BE READ: $file LINE: $line_number PADD: $padding";
+      return "<span class=\"readmehelp-error\">CAN'T BE READ:</span> $file LINE: $line_number PADD: $padding";
     }
 
     // An example how to change css on the highlighted code.

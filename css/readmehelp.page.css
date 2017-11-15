@@ -5,6 +5,9 @@
  * Released under MIT license. Copyright 2015 GitHub, Inc.
  */
 
+.readmehelp-error {
+  color: red;
+}
 .readmehelp-100-width {
   max-width: 100px;
 }
