@@ -41,7 +41,7 @@ https://www.drupal.org/
 ![ALT Text](images/druplicon.png "Image relative path test")
 
 
-![ALT Text](https://raw.githubusercontent.com/drugan/readmehelp/master/images/drupalcat.png
+![ALT Text](https://raw.githubusercontent.com/drugan/readmehelp/8.x-1.x/images/drupalcat.png
 "Image absolute path test")
 
 

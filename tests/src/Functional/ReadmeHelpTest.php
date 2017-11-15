@@ -104,10 +104,10 @@ HTML;
     $src = "$host/$path/images/druplicon.png";
     $this->assertSession()->responseMatches('{<img src="' . $src . '" alt="ALT Text" title="Image relative path test" class="markdown-image"\ ?\/?>}');
 
-    $this->assertSession()->responseMatches('{<img src="https://raw.githubusercontent.com/drugan/readmehelp/master/images/drupalcat.png" alt="ALT Text" title="Image absolute path test" class="markdown-image"\ ?\/?>}');
+    $this->assertSession()->responseMatches('{<img src="https://raw.githubusercontent.com/drugan/readmehelp/8.x-1.x/images/drupalcat.png" alt="ALT Text" title="Image absolute path test" class="markdown-image"\ ?\/?>}');
 
     $unordered_list = <<<'HTML'
-<ul><li>Unordered list ITEM_1</li>
+<ul class="ul"><li>Unordered list ITEM_1</li>
 <li>Unordered list long line test test test test test test test test test test
 test test test test test test test test test test test ITEM_2</li>
 </ul>
@@ -116,7 +116,7 @@ HTML;
     $this->assertSession()->responseContains($unordered_list);
 
     $ordered_list = <<<'HTML'
-<ol><li>Ordered list ITEM_1</li>
+<ol class="ol"><li>Ordered list ITEM_1</li>
 <li>Ordered list long line test test test test test test test test test test
 test test test test test test test test test test test ITEM_2</li>
 </ol>
@@ -134,9 +134,9 @@ HTML;
     $this->assertSession()->linkByHrefNotExists('#backslashed-leading-hash');
     $this->assertSession()->pageTextContains('> Backslashed line leading greater than symbol');
     $this->assertSession()->linkByHrefNotExists('#backslashed-line-leading-greater');
-    $this->assertSession()->responseMatches('/<hr class="underscore"\ ?\/?>/');
-    $this->assertSession()->responseMatches('/<hr class="asterisk"\ ?\/?>/');
-    $this->assertSession()->responseMatches('/<hr class="dash"\ ?\/?>/');
+    $this->assertSession()->responseMatches('/<hr class="hr-underscore"\ ?\/?>/');
+    $this->assertSession()->responseMatches('/<hr class="hr-asterisk"\ ?\/?>/');
+    $this->assertSession()->responseMatches('/<hr class="hr-dash"\ ?\/?>/');
 
     $this->assertSession()->responseContains('<h2><a id="h2" href="#h2" class="anchor">#</a> H2</h2>');
     $this->assertSession()->responseContains('<h2><a id="alternative-h2" href="#alternative-h2" class="anchor"># </a>Alternative H2</h2>');
@@ -159,15 +159,13 @@ HTML;
     // The PHP file tokens should be replaced by the specified snippets.
     $this->assertSession()->pageTextNotContains('@PHPFILE: readmehelp_test/readmehelp_test.module LINE:19 PADD:1 :PHPFILE@');
     $this->assertSession()->pageTextNotContains('@PHPFILE: readmehelp_test/readmehelp_test.module :PHPFILE@');
-
-    $highlighted_php_snippet = '<table class="highlighted-snippet"><tr><td><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span></td><td></span><span style="color: #007700">function&nbsp;</span><span style="color: #0000BB">test_php_snippet_2</span><span style="color: #007700">(</span><span style="color: #0000BB">$arg&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">FALSE</span><span style="color: #007700">)&nbsp;{<br><strong style="background-color:yellow">&nbsp;&nbsp;echo&nbsp;</span><span style="color: #DD0000">"Test"</span><span style="color: #007700">;</strong><br>&nbsp;&nbsp;echo&nbsp;</span><span style="color: #DD0000">"Test"</span><span style="color: #007700">;</td></tr></table>';
-
-    $this->assertSession()->responseContains($highlighted_php_snippet);
-
-    $highlighted_php_file = '<table class="highlighted-snippet"><tr><td><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span></td><td><span style="color: #000000">
-<span style="color: #0000BB">&lt;?php<br><span></span><br></span><span style="color: #CCCCCC; font-style: oblique; color: #a48bad;">/**<br>&nbsp;*&nbsp;@file<br>&nbsp;*&nbsp;Contains&nbsp;readmehelp_test.module.<br>&nbsp;*/<br><span></span><br>/**<br>&nbsp;*&nbsp;Tests&nbsp;PHP&nbsp;snippet.<br>&nbsp;*/<br></span><span style="color: #007700">function&nbsp;</span><span style="color: #0000BB">test_php_snippet</span><span style="color: #007700">(</span><span style="color: #0000BB">$arg&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">TRUE</span><span style="color: #007700">)&nbsp;{<br>&nbsp;&nbsp;echo&nbsp;</span><span style="color: #DD0000">"Test"</span><span style="color: #007700">;<br>}<br><span></span><br></span><span style="color: #CCCCCC; font-style: oblique; color: #a48bad;">/**<br>&nbsp;*&nbsp;One&nbsp;more&nbsp;test.<br>&nbsp;*/<br></span><span style="color: #007700">function&nbsp;</span><span style="color: #0000BB">test_php_snippet_2</span><span style="color: #007700">(</span><span style="color: #0000BB">$arg&nbsp;</span><span style="color: #007700">=&nbsp;</span><span style="color: #0000BB">FALSE</span><span style="color: #007700">)&nbsp;{<br>&nbsp;&nbsp;echo&nbsp;</span><span style="color: #DD0000">"Test"</span><span style="color: #007700">;<br>&nbsp;&nbsp;echo&nbsp;</span><span style="color: #DD0000">"Test"</span><span style="color: #007700">;<br>}</td></tr></table>';
-
-    $this->assertSession()->responseContains($highlighted_php_file);
+    $snippet = $this->getSession()->getPage()->findAll('css', '.highlighted-snippet');
+    $this->assertEquals('table', $snippet[0]->getTagName());
+    $this->assertEquals('table', $snippet[1]->getTagName());
+    $strlen_0 = strlen($snippet[0]->getText());
+    $strlen_1 = strlen($snippet[1]->getText());
+    $this->assertEquals(87, $strlen_0, "The expected snippet length 87 is equal to actual $strlen_0.");
+    $this->assertEquals(298, $strlen_1, "The expected snippet length 298 is equal to actual $strlen_1.");
   }
 
 }
