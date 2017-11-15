@@ -268,7 +268,7 @@ class ReadmehelpMarkdown extends FilterBase {
   /**
    * Wraps leading "> " or ">> " text lines into blockquote or cite tag.
    *
-   * Additionaly a leading sign turns into anchor link, so the blockquote can be
+   * Additionally a leading sign turns into anchor link, so the blockquote can be
    * used as a local or external link target. Multiple subsequent leading "> "
    * or ">> " text lines can be used to wrap them into one tag.
    *
@@ -300,9 +300,9 @@ class ReadmehelpMarkdown extends FilterBase {
   /**
    * Wraps line followed with multi "=" sign line into h1 tag.
    *
-   * Can be used just once at the very beggining of a text. Additionaly "#" sign
-   * turned into anchor link, so the heading can be used as a local or external
-   * link target.
+   * Can be used just once at the very beginning of a text. Additionally "#"
+   * sign turned into anchor link, so the heading can be used as a local or
+   * externallink target.
    *
    * @param string $text
    *   The string to be filtered.
@@ -324,8 +324,8 @@ class ReadmehelpMarkdown extends FilterBase {
   /**
    * Wraps line followed with multi "-" sign line into h2 tag.
    *
-   * Additionaly "#" sign turned into anchor link, so the heading can be used as
-   * a local or external link target.
+   * Additionally "#" sign turned into anchor link, so the heading can be used
+   * as a local or external link target.
    *
    * @param string $text
    *   The string to be filtered.
@@ -345,12 +345,12 @@ class ReadmehelpMarkdown extends FilterBase {
   }
 
   /**
-   * Wraps lines preceeded with up to 6 "#" + " " text lines into h1-6 tag.
+   * Wraps lines preceded with up to 6 "#" + " " text lines into h1-6 tag.
    *
-   * The single "# " can be used just once at the very beggining of a text.
+   * The single "# " can be used just once at the very beginning of a text.
    * Other hash signs + space sets can be used multiple times in a text.
-   * Additionaly, "#" sign turns into anchor link, so the heading can be used as
-   * a local or external link target.
+   * Additionally, "#" sign turns into anchor link, so the heading can be used
+   * as a local or external link target.
    *
    * @param string $text
    *   The string to be filtered.
