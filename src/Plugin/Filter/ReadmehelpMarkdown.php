@@ -268,9 +268,9 @@ class ReadmehelpMarkdown extends FilterBase {
   /**
    * Wraps leading "> " or ">> " text lines into blockquote or cite tag.
    *
-   * Additionally a leading sign turns into anchor link, so the blockquote can be
-   * used as a local or external link target. Multiple subsequent leading "> "
-   * or ">> " text lines can be used to wrap them into one tag.
+   * Additionally a leading sign turns into anchor link, so the blockquote can
+   * be used as a local or external link target. Multiple subsequent leading
+   * "> " or ">> " text lines can be used to wrap them into one tag.
    *
    * @param string $text
    *   The string to be filtered.
