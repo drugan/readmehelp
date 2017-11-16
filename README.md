@@ -1,6 +1,6 @@
 # README Help module
 
-This module in the first place is intented for developers. The
+This module in the first place is intended for developers. The
 main feature of the module is reflected in its name:
 
 > Forget about implementing `hook_help()` in `your_module.module` file. Just
@@ -31,6 +31,9 @@ basics of the markdown syntax:
 "Markdown Text Filter")
 - [admin/help/readmehelp#advanced-readme-help](#advanced-readme-help
 "Advanced README Help")
+- [admin/help/readmehelp#module-author](#module-author "Module author")
+- [README Help on drupal.org ↗](https://www.drupal.org/project/readmehelp)
+- [README Help on github.com ↗](https://github.com/drugan/readmehelp)
 
 ## Usage
 
@@ -363,7 +366,7 @@ and edit for your needs.
 
 ********************************************************************************
 
-@PHPFILE: readmehelp.module LINE:62 PADD:25 :PHPFILE@
+@PHPFILE: your_module.module.example LINE:33 PADD:33 :PHPFILE@
 
 ********************************************************************************
 

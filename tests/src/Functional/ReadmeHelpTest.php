@@ -57,7 +57,7 @@ class ReadmeHelpTest extends BrowserTestBase {
     // Ensure the actual help page is displayed to avoid a false positive.
     $this->assertResponse(200);
 
-    $this->assertSession()->responseContains('<h1><a id="readme-help-test-module" href="#readme-help-test-module" class="anchor">#</a> README Help Test module</h1>');
+    $this->assertSession()->responseContains('<h1 class="h-1"><a id="readme-help-test-module" href="#readme-help-test-module" class="anchor">#</a> README Help Test module</h1>');
     $this->assertSession()->responseContains('<strong>Asterisk Bold</strong>');
     $this->assertSession()->responseContains('<strong>Underscore Bold</strong>');
     $this->assertSession()->responseContains('<em>Asterisk Italic</em>');
@@ -68,7 +68,7 @@ class ReadmeHelpTest extends BrowserTestBase {
 <pre><code class="code--multiline">
 // Multiline code block
 
-function test() {
+function readmehelp_test() {
   echo "Test";
   $test = [
     1,
@@ -138,12 +138,12 @@ HTML;
     $this->assertSession()->responseMatches('/<hr class="hr-asterisk"\ ?\/?>/');
     $this->assertSession()->responseMatches('/<hr class="hr-dash"\ ?\/?>/');
 
-    $this->assertSession()->responseContains('<h2><a id="h2" href="#h2" class="anchor">#</a> H2</h2>');
-    $this->assertSession()->responseContains('<h2><a id="alternative-h2" href="#alternative-h2" class="anchor"># </a>Alternative H2</h2>');
-    $this->assertSession()->responseContains('<h3><a id="h3" href="#h3" class="anchor">#</a> H3</h3>');
-    $this->assertSession()->responseContains('<h4><a id="h4" href="#h4" class="anchor">#</a> H4</h4>');
-    $this->assertSession()->responseContains('<h5><a id="h5" href="#h5" class="anchor">#</a> H5</h5>');
-    $this->assertSession()->responseContains('<h6><a id="h6" href="#h6" class="anchor">#</a> H6</h6>');
+    $this->assertSession()->responseContains('<h2 class="h-2"><a id="h2" href="#h2" class="anchor">#</a> H2</h2>');
+    $this->assertSession()->responseContains('<h2 class="h-2"><a id="alternative-h2" href="#alternative-h2" class="anchor"># </a>Alternative H2</h2>');
+    $this->assertSession()->responseContains('<h3 class="h-3"><a id="h3" href="#h3" class="anchor">#</a> H3</h3>');
+    $this->assertSession()->responseContains('<h4 class="h-4"><a id="h4" href="#h4" class="anchor">#</a> H4</h4>');
+    $this->assertSession()->responseContains('<h5 class="h-5"><a id="h5" href="#h5" class="anchor">#</a> H5</h5>');
+    $this->assertSession()->responseContains('<h6 class="h-6"><a id="h6" href="#h6" class="anchor">#</a> H6</h6>');
   }
 
   /**
@@ -164,8 +164,8 @@ HTML;
     $this->assertEquals('table', $snippet[1]->getTagName());
     $strlen_0 = strlen($snippet[0]->getText());
     $strlen_1 = strlen($snippet[1]->getText());
-    $this->assertEquals(87, $strlen_0, "The expected snippet length 87 is equal to actual $strlen_0.");
-    $this->assertEquals(298, $strlen_1, "The expected snippet length 298 is equal to actual $strlen_1.");
+    $this->assertEquals(98, $strlen_0, "The expected snippet length 98 is equal to actual $strlen_0.");
+    $this->assertEquals(320, $strlen_1, "The expected snippet length 320 is equal to actual $strlen_1.");
   }
 
 }

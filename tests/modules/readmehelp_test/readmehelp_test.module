@@ -8,14 +8,14 @@
 /**
  * Tests PHP snippet.
  */
-function test_php_snippet($arg = TRUE) {
+function readmehelp_test_php_snippet($arg = TRUE) {
   echo "Test";
 }
 
 /**
  * One more test.
  */
-function test_php_snippet_2($arg = FALSE) {
+function readmehelp_test_php_snippet_2($arg = FALSE) {
   echo "Test";
   echo "Test";
 }

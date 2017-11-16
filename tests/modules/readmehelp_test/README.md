@@ -13,7 +13,7 @@ _Underscore Italic_
 ```php
 // Multiline code block
 
-function test() {
+function readmehelp_test() {
   echo "Test";
   $test = [
     1,

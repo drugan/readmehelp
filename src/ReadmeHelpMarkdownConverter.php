@@ -158,7 +158,7 @@ class ReadmeHelpMarkdownConverter implements ReadmeHelpInterface {
       return $this->t('None of the %files files is found in the %dir folder or their content is empty. Please, <a href=":href">README</a>.', [
         '%files' => $files,
         '%dir' => $dir,
-        ':href' => \Drupal::url('help.page', ['name' => 'readmehelp']),
+        ':href' => 'admin/help/readmehelp',
       ]);
     }
 

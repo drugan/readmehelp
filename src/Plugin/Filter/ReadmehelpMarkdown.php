@@ -338,7 +338,7 @@ class ReadmehelpMarkdown extends FilterBase {
     function ($matches) {
       if ($match = !empty($matches[1]) ? rtrim($matches[1]) : '') {
         $id = trim(Html::getUniqueId($match), '-');
-        $match = "<h2><a id=\"$id\" href=\"#$id\" class=\"anchor\"># </a>$match</h2>";
+        $match = "<h2 class=\"h-2\"><a id=\"$id\" href=\"#$id\" class=\"anchor\"># </a>$match</h2>";
       }
       return $match;
     }, $text);
@@ -367,7 +367,7 @@ class ReadmehelpMarkdown extends FilterBase {
       function ($matches) use ($i) {
         if ($match = !empty($matches[1]) ? rtrim($matches[1]) : '') {
           $id = trim(Html::getUniqueId($match), '-');
-          $match = "<h$i><a id=\"$id\" href=\"#$id\" class=\"anchor\">#</a>$match</h$i>";
+          $match = "<h$i class=\"h-$i\"><a id=\"$id\" href=\"#$id\" class=\"anchor\">#</a>$match</h$i>";
         }
         return $match;
       }, $text);
