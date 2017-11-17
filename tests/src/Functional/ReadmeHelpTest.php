@@ -51,8 +51,8 @@ class ReadmeHelpTest extends BrowserTestBase {
     $implements_hook_help = \Drupal::moduleHandler()->implementsHook('readmehelp_test', 'help');
     $this->assertFalse($implements_hook_help, 'The hook_help is not implemented on the module.');
     $this->drupalGet('admin/help');
-    $this->assertSession()->linkExistsExact('readmehelp_test');
-    $this->getSession()->getPage()->clickLink('readmehelp_test');
+    $this->assertSession()->linkExistsExact('README Help test');
+    $this->getSession()->getPage()->clickLink('README Help test');
     $this->assertSession()->addressMatches('/\/admin\/help\/readmehelp_test$/');
     // Ensure the actual help page is displayed to avoid a false positive.
     $this->assertResponse(200);
