@@ -319,13 +319,13 @@ To insert higlighted snippet of any existing on a Drupal site PHP file you need
 to construct a token like the following:
 
 ```
-@PHPFILE: modules/contrib/readmehelp/readmehelp.module LINE:28 PADD:7 :PHPFILE@
+@PHPFILE: modules/contrib/readmehelp/readmehelp.module LINE:26 PADD:7 :PHPFILE@
 ```
 
 `...or just:`
 
 ```
-@PHPFILE: readmehelp.module LINE:28 PADD:7 :PHPFILE@
+@PHPFILE: readmehelp.module LINE:26 PADD:7 :PHPFILE@
 ```
 
 > The absolute or relative path to a file may be followed by a **LINE** number
@@ -339,7 +339,7 @@ the [github.com](https://github.com/drugan/readmehelp#dynamic-php-snippets
 
 ********************************************************************************
 
-@PHPFILE: readmehelp.module LINE:28 PADD:7 :PHPFILE@
+@PHPFILE: readmehelp.module LINE:26 PADD:7 :PHPFILE@
 
 ********************************************************************************
 

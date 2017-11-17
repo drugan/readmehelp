@@ -36,7 +36,7 @@ class ReadmeHookHelpSection extends HookHelpSection implements ReadmeHelpInterfa
         }
       }
       if ($file || in_array($name, $hook_help)) {
-        $title = $module->getName($name);
+        $title = $this->moduleHandler->getName($name);
         $topics[$title] = Link::createFromRoute($title, 'help.page', ['name' => $name]);
       }
     }
