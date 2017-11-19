@@ -18,6 +18,10 @@ use Drupal\Component\Utility\Unicode;
  *   title = @Translation("Convert markdown into markup"),
  *   description = @Translation("Converts basic markdown elements (like in README files) into HTML markup."),
  *   type = Drupal\filter\Plugin\FilterInterface::TYPE_MARKUP_LANGUAGE,
+ *   settings = {
+ *     "quick_tips" = "",
+ *   },
+ *   weight = -100
  * )
  */
 class ReadmehelpMarkdown extends FilterBase {

@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * @file
+ * Install and uninstall functions for the readmehelp module.
+ */
+
+use Drupal\filter\Entity\FilterFormat;
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Disabling the 'readmehelp_markdown' filter does not remove it from format
+ * available filters. Users may try to disable the format which allows to
+ * uninstall the module but this removes it from the UI without any chance to
+ * get it back. So, the clean up must be done on uninstall.
+ *
+ * @see https://www.drupal.org/project/drupal/issues/949220
+ * @see https://www.drupal.org/project/drupal/issues/2502637
+ */
+function readmehelp_uninstall() {
+  foreach (FilterFormat::loadMultiple() as $filter_format) {
+    $filters = $filter_format->getPluginCollections()['filters'];
+    if ($filters->has('readmehelp_markdown')) {
+      $filters->removeInstanceId('readmehelp_markdown');
+    }
+  }
+}
