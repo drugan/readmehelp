@@ -15,7 +15,8 @@ class ReadmeHelpController extends HelpController {
   public function helpPage($name) {
     $build = [];
     $self = $name == 'readmehelp';
-    $depender = $self || in_array('readmehelp', system_get_info('module', $name)['dependencies']);
+    $dependencies = system_get_info('module', $name)['dependencies'];
+    $depender = $self || in_array('readmehelp', $dependencies) || in_array('drupal:readmehelp', $dependencies);
     // Allow dependers to override default behaviour not displaying README
     // markdown file automatically and instead calling a regular hook_help() in
     // their .module files. For this to happen an empty hook_readmehelp() should
