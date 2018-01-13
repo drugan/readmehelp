@@ -27,7 +27,7 @@ basics of the markdown syntax:
 "Allowed HTML tags")
 - [admin/help/readmehelp#dynamic-php-snippets](#dynamic-php-snippets
 "Dynamic PHP Snippets")
-- [admin/help/readmehelp#markdown-text-filter](#markdown-filter
+- [admin/help/readmehelp#markdown-text-filter](#markdown-text-filter
 "Markdown Text Filter")
 - [admin/help/readmehelp#advanced-readme-help](#advanced-readme-help
 "Advanced README Help")
