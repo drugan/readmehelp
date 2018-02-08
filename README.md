@@ -1,9 +1,16 @@
 # README Help module
 
-This module in the first place is intended for developers. The
-main feature of the module is reflected in its name:
+Allows automatically to display module's *README* file on
+the **admin/help/your_module** page. Provides [markdown ↗](https://en.wikipedia.org/wiki/Markdown)
+text filter for creating text formats.
 
-> Forget about implementing `hook_help()` in `your_module.module` file. Just
+> Tip: you can see this file in your browser by clicking
+the [admin/help#](#0 "? Help") link at the right of the *Admin toolbar* and then
+the [admin/help/readmehelp#](#0 "README Help") link in the list.
+
+________________________________________________________________________________
+
+Forget about implementing `hook_help()` in `your_module.module` file. Just
 write a decent *README* file with all information required and see it looking
 almost the same both on the **admin/help/your_module** page as well in your text
 editor. No more hardly to read (and to write!) markup intermingled with an
@@ -372,7 +379,7 @@ and edit for your needs.
 
 ###### Module author:
 ```
-  Vladimir Proshin (drugan)
+  Vlad Proshin (drugan)
   [proshins@gmail.com](proshins@gmail.com)
   [https://drupal.org/u/drugan](https://drupal.org/u/drugan)
 ```
