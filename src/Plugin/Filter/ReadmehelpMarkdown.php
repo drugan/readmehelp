@@ -79,7 +79,7 @@ class ReadmehelpMarkdown extends FilterBase {
     if (!empty($text)) {
       $request = \Drupal::request();
       $path = $request->getPathInfo();
-      $host = str_replace($path, '', $request->getUri());
+      $host = str_replace($path, '', $request->getSchemeAndHttpHost() . $request->getRequestUri());
       $path = $file_path ? trim($file_path, '/') : trim($path, '/');
 
       $text = $text . "\n";
