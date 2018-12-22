@@ -1,6 +1,6 @@
 name: README Help
 type: module
-description: Renders README file on the admin/help/your_module page
+description: Renders README file on the admin/help/your_module page.
 core: 8.x
 package: Help
 dependencies:

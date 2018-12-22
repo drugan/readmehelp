@@ -4,4 +4,4 @@ description: 'Tests markdown to markup conversion.'
 package: Testing
 core: 8.x
 dependencies:
-  - readmehelp
+  - readmehelp:readmehelp
