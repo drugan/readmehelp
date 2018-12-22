@@ -42,26 +42,19 @@ function readmehelp_form_system_modules_alter(&$form, FormStateInterface $form_s
   foreach ($form['modules'] as $package => $modules) {
     if (is_array($modules)) {
       foreach ($modules as $module => $data) {
-        if (is_array($data) && isset($data['name'])) {
-          $readmehelp = $module == 'readmehelp';
-          if (!$readmehelp && $info = system_get_info('module', $module)) {
-            $readmehelp = in_array('drupal:readmehelp', $info['dependencies']);
-            $readmehelp = $readmehelp ?: in_array('readmehelp', $info['dependencies']);
-          }
-          if ($readmehelp) {
-            $help = t('README Help');
-            $form['modules'][$package][$module]['links']['help'] = [
-              '#type' => 'link',
-              '#title' => $help,
-              '#url' => Url::fromRoute('help.page', ['name' => $module]),
-              '#options' => [
-                'attributes' => [
-                  'class' => ['module-link', 'module-link-help'],
-                  'title' => $help,
-                ],
+        if (is_array($data) && (isset($data['#requires']['readmehelp']) || $module == 'readmehelp')) {
+          $help = t('README Help');
+          $form['modules'][$package][$module]['links']['help'] = [
+            '#type' => 'link',
+            '#title' => $help,
+            '#url' => Url::fromRoute('help.page', ['name' => $module]),
+            '#options' => [
+              'attributes' => [
+                'class' => ['module-link', 'module-link-help'],
+                'title' => $help,
               ],
-            ];
-          }
+            ],
+          ];
         }
       }
     }
