@@ -253,6 +253,9 @@ class ReadmeHelpMarkdownConverter implements ReadmeHelpInterface {
         if (!is_file($file)) {
           $name = basename($orig);
           $file = "$root/$path/$name";
+          if (!is_file($file)) {
+            $file = "$root/$path/$orig";
+          }
         }
       }
 
@@ -280,7 +283,6 @@ class ReadmeHelpMarkdownConverter implements ReadmeHelpInterface {
    * @todo add css & js files support.
    */
   public function highlightPhp($file, $line_number, $padding, $markup = FALSE) {
-
     if (!$file || !is_readable($file)) {
       return "<span class=\"readmehelp-error\">CAN'T BE READ:</span> $file LINE: $line_number PADD: $padding";
     }
