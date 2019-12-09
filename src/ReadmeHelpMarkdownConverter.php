@@ -130,7 +130,7 @@ class ReadmeHelpMarkdownConverter implements ReadmeHelpInterface {
     $files = static::READMEHELP_FILES;
     // Allow files from directories other than a module root folder.
     if (is_file($file)) {
-      $files = ', ' . basename($file);
+      $files = basename($file);
       $dir = dirname($file);
     }
     if (isset($dir) || (is_dir($file) && $dir = $file)) {
