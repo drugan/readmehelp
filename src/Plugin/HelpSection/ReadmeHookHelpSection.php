@@ -28,7 +28,8 @@ class ReadmeHookHelpSection extends HookHelpSection implements ReadmeHelpInterfa
     foreach ($this->moduleHandler->getModuleList() as $name => $module) {
       $file = FALSE;
       $self = $name == 'readmehelp';
-      $dependencies = system_get_info('module', $name)['dependencies'];
+      $extension_info = \Drupal::service('extension.list.module')->getExtensionInfo($name);
+      $dependencies = $extension_info['dependencies'];
       if (in_array('readmehelp', $dependencies) || in_array('drupal:readmehelp', $dependencies) || $self) {
         foreach (explode(', ', static::READMEHELP_FILES) as $readme) {
           if ($file = file_exists("$dirs[$name]/$readme")) {

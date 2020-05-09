@@ -46,7 +46,9 @@ class ReadmeHelpTest extends BrowserTestBase {
    */
   public function testReadmehelpMarkdown() {
     $this->drupalLogin($this->adminUser);
-    $depender = in_array('readmehelp', system_get_info('module', 'readmehelp_test')['dependencies']);
+    $extension_info = $this->container->get('extension.list.module')->getExtensionInfo('readmehelp_test');
+    $dependencies = $extension_info['dependencies'];
+    $depender = in_array('drupal:readmehelp', $dependencies);
     $this->assertTrue($depender, 'The module is dependent on the readmehelp.');
     $implements_hook_help = \Drupal::moduleHandler()->implementsHook('readmehelp_test', 'help');
     $this->assertFalse($implements_hook_help, 'The hook_help is not implemented on the module.');

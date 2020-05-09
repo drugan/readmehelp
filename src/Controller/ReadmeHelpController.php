@@ -15,7 +15,7 @@ class ReadmeHelpController extends HelpController {
   public function helpPage($name) {
     $build = [];
     $self = $name == 'readmehelp';
-    $info = system_get_info('module', $name);
+    $info = \Drupal::service('extension.list.module')->getExtensionInfo($name);
     $dependencies = isset($info['dependencies']) ? $info['dependencies'] : [];
     $depender = $self || in_array('readmehelp', $dependencies) || in_array('drupal:readmehelp', $dependencies);
     // Allow dependers to override default behaviour not displaying README
