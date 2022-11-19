@@ -1,7 +1,7 @@
 name: README Help
 type: module
 description: Renders README file on the admin/help/your_module page.
-core_version_requirement: ^8.8 || ^9
+core_version_requirement: ^8.8 || ^9 || ^10
 package: Help
 dependencies:
   - drupal:help

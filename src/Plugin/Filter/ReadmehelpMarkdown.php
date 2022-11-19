@@ -8,6 +8,9 @@ use Drupal\filter\Plugin\FilterBase;
 use Drupal\filter\FilterProcessResult;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\Unicode;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Provides a filter for markdown.
@@ -24,7 +27,42 @@ use Drupal\Component\Utility\Unicode;
  *   weight = -100
  * )
  */
-class ReadmehelpMarkdown extends FilterBase {
+class ReadmehelpMarkdown extends FilterBase implements ContainerFactoryPluginInterface {
+  /**
+   * The current request.
+   *
+   * @var \Symfony\Component\HttpFoundation\Request
+   */
+  protected $request;
+
+  /**
+   * Creates a HelpBlock instance.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin_id for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   The current request.
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, Request $request) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $this->request = $request;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('request_stack')->getCurrentRequest(),
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -77,9 +115,8 @@ class ReadmehelpMarkdown extends FilterBase {
    */
   public function process($text, $langcode, $file_path = NULL) {
     if (!empty($text)) {
-      $request = \Drupal::request();
-      $path = $request->getPathInfo();
-      $host = str_replace($path, '', $request->getSchemeAndHttpHost() . $request->getRequestUri());
+      $path = $this->request->getPathInfo();
+      $host = str_replace($path, '', $this->request->getSchemeAndHttpHost() . $this->request->getRequestUri());
       $path = $file_path ? trim($file_path, '/') : trim($path, '/');
 
       $text = $text . "\n";

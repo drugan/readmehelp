@@ -15,7 +15,7 @@ class ReadmeHelpController extends HelpController {
   public function helpPage($name) {
     $build = [];
     $self = $name == 'readmehelp';
-    $info = \Drupal::service('extension.list.module')->getExtensionInfo($name);
+    $info = $this->moduleExtensionList->getExtensionInfo($name);
     $dependencies = isset($info['dependencies']) ? $info['dependencies'] : [];
     $depender = $self || in_array('readmehelp', $dependencies) || in_array('drupal:readmehelp', $dependencies);
     // Allow dependers to override default behaviour not displaying README
@@ -25,7 +25,7 @@ class ReadmeHelpController extends HelpController {
     // @code
     // function MY_MODULE_readmehelp() {}
     // @endcode
-    if ($depender && !$this->moduleHandler()->implementsHook($name, 'readmehelp')) {
+    if ($depender && !$this->moduleHandler()->hasImplementations('readmehelp', $name)) {
       $converter = \Drupal::service('readmehelp.markdown_converter');
       $build['top'] = [
         '#attached' => [

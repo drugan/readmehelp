@@ -16,7 +16,7 @@ class ReadmeHelpTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'filter',
     'help',
     'readmehelp',
@@ -33,7 +33,12 @@ class ReadmeHelpTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected $defaultTheme = 'stark';
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
     parent::setUp();
     $this->adminUser = $this->drupalCreateUser(['access administration pages']);
   }
@@ -50,14 +55,14 @@ class ReadmeHelpTest extends BrowserTestBase {
     $dependencies = $extension_info['dependencies'];
     $depender = in_array('drupal:readmehelp', $dependencies);
     $this->assertTrue($depender, 'The module is dependent on the readmehelp.');
-    $implements_hook_help = \Drupal::moduleHandler()->implementsHook('readmehelp_test', 'help');
+    $implements_hook_help = \Drupal::moduleHandler()->hasImplementations('help', 'readmehelp_test');
     $this->assertFalse($implements_hook_help, 'The hook_help is not implemented on the module.');
     $this->drupalGet('admin/help');
     $this->assertSession()->linkExistsExact('README Help test');
     $this->getSession()->getPage()->clickLink('README Help test');
     $this->assertSession()->addressMatches('/\/admin\/help\/readmehelp_test$/');
     // Ensure the actual help page is displayed to avoid a false positive.
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
 
     $this->assertSession()->responseContains('<h1 class="h-1"><a id="readme-help-test-module" href="#readme-help-test-module" class="anchor">#</a> README Help Test module</h1>');
     $this->assertSession()->responseContains('<strong>Asterisk Bold</strong>');
@@ -157,7 +162,7 @@ HTML;
     $this->drupalLogin($this->adminUser);
     $this->drupalGet('admin/help/readmehelp_test');
     // Ensure the actual help page is displayed to avoid a false positive.
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
     // The PHP file tokens should be replaced by the specified snippets.
     $this->assertSession()->pageTextNotContains('@PHPFILE: readmehelp_test/readmehelp_test.module LINE:19 PADD:1 :PHPFILE@');
     $this->assertSession()->pageTextNotContains('@PHPFILE: readmehelp_test/readmehelp_test.module :PHPFILE@');
