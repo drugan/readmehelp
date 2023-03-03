@@ -125,15 +125,15 @@ class ReadmeHelpMarkdownConverter implements ReadmeHelpInterface {
    * @see ::insertPhpSnippets()
    */
   public function convertMarkdownFile($module_name, $file = NULL) {
-    $text = '';
+    $text = $readme = '';
     $root = $this->root;
     $files = static::READMEHELP_FILES;
     // Allow files from directories other than a module root folder.
-    if (is_file($file)) {
-      $files = ', ' . basename($file);
+    if ($file && is_file($file)) {
+      $files[] = basename($file);
       $dir = dirname($file);
     }
-    if (isset($dir) || (is_dir($file) && $dir = $file)) {
+    if (isset($dir) || ($file && is_dir($file) && $dir = $file)) {
       $path = str_replace($root, '', $dir);
       // Seems that $dir passed is the relative to $root one.
       if ($path == $dir) {
@@ -147,7 +147,7 @@ class ReadmeHelpMarkdownConverter implements ReadmeHelpInterface {
     }
     $path = trim($path, '/');
 
-    foreach (explode(', ', $files) as $readme) {
+    foreach ($files as $readme) {
       if (file_exists("$dir/$readme")) {
         if ($text = file_get_contents("$dir/$readme")) {
           break;
@@ -156,7 +156,7 @@ class ReadmeHelpMarkdownConverter implements ReadmeHelpInterface {
     }
     if (!$text) {
       return $this->t('None of the %files files is found in the %dir folder or their content is empty. Please, <a href=":href">README</a>.', [
-        '%files' => $files,
+        '%files' => implode(', ', $files),
         '%dir' => $dir,
         ':href' => '/admin/help/readmehelp',
       ]);
@@ -244,7 +244,7 @@ class ReadmeHelpMarkdownConverter implements ReadmeHelpInterface {
     return preg_replace_callback('{([^\s])(@PHPFILE:).*?(:PHPFILE@)}s', function ($matches) use ($root, $path) {
       $pattern = '/(\ *@PHPFILE)|(PHPFILE@\ *)|(\ *LINE)|(\ *PADD)/';
       $match = explode(':', preg_replace($pattern, '', $matches[0]));
-      $prefix = '';
+      $prefix = $file = $line = $padding = '';
       if (isset($match[1]) && $file = $orig = trim($match[1])) {
         $line = isset($match[2]) ? (int) trim($match[2]) : 1;
         $padding = isset($match[3]) ? (int) trim($match[3]) : 10;

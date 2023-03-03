@@ -1,8 +1,13 @@
 # README Help module
 
-Allows automatically to display module's *README* file on
-the **admin/help/your_module** page. Provides [markdown ↗](https://en.wikipedia.org/wiki/Markdown)
-text filter for creating text formats.
+A simple module allowing to display a *README.md*, *README.txt* or *README* file
+on the **admin/help/your_module** page. Additionally, the module supports
+inserting highlighted `PHP` file snippets into a *README* file and provides
+a [markdown ↗](https://en.wikipedia.org/wiki/Markdown) text filter for
+creating *Drupal* text formats.
+
+The main difference with other similar modules is that it has no dependency on
+any external library, package or contrib module.
 
 > Tip: you can see this file in your browser by clicking
 the [admin/help#](#0 "? Help") link at the right of the *Admin toolbar* and then
@@ -11,12 +16,11 @@ the [admin/help/readmehelp#](#0 "README Help") link in the list.
 ________________________________________________________________________________
 
 Forget about implementing `hook_help()` in `your_module.module` file. Just
-write a decent *README* file with all information required and see it looking
-almost the same both on the **admin/help/your_module** page as well in your text
-editor. No more hardly to read (and to write!) markup intermingled with an
-actual user help text. All that you need is just to add the `readmehelp`
-dependency in `your_module.info.yml` and spend a couple of minutes learning the
-basics of the markdown syntax:
+create a decent *README* file with all information required and see it looking
+almost the same both on the **admin/help/your_module** page as well as in your
+text editor. No more hardly to read (and to write!) markup intermingled with the
+end user help text. All that you need is to enable the `readmehelp` module
+and spend a couple of minutes learning basics of the markdown syntax:
 
 - [admin/help/readmehelp#usage](#usage "Usage")
 - [admin/help/readmehelp#markdown-special-symbols](#markdown-special-symbols
@@ -44,23 +48,17 @@ basics of the markdown syntax:
 
 ## Usage
 
-Open `your_module.info.yml` file and make it dependent on the `readmehelp`
-module:
+Enable the module and
+visit [admin/config/system/readmehelp-settings#](#0 "README Help settings") page
+to check a list of modules allowed to display their *README* file as a module
+help.
 
-```yml
-name: Your Module
-type: module
-description: Does awesome things.
-core: 8.x
-dependencies:
-  - readmehelp
-```
+By default all modules having no `hook_help()` implementation are selected.
+Adding / removing additional modules will be done automatically in a module
+install / uninstall process.
 
-Then, if `your_module` is already installed on the site, just flush the caches.
-If it's not, then the `readmehelp` will be installed automatically along with
-`your_module`. That's it. You may skip further reading if you are already
-familiar with markdown syntax or `your_module` help does not require complex
-data compiling or multi-page help.
+Changes could be done manually on this form if you want to display a
+module's *README* file instead of the `hook_help()` content.
 
 ### Markdown special symbols
 
@@ -315,7 +313,7 @@ building *README Help* files:
 - span
 
 Also, [HTML Entities](https://dev.w3.org/html5/html-author/charref)
-and [HTML comments](https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/Getting_started#HTML_comments)
+and [HTML comments](https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/Getting_started#html_comments)
 are supported.
 
 <!-- This text is not visible on the admin/help/your_module page -->
@@ -335,18 +333,19 @@ to construct a token like the following:
 @PHPFILE: readmehelp.module LINE:26 PADD:7 :PHPFILE@
 ```
 
-> The absolute or relative path to a file may be followed by a **LINE** number
-argument and **PADD**, which is the number of lines to add before and after
+> The absolute or relative path to a file might be followed by a **LINE** number
+and **PADD** which is the number of lines to add before and after
 the **LINE** (additionally highlighted with yellow color). Both arguments are
 optional. If no **PADD** is passed then the default **10** lines will be added.
-If no **LINE** is passed then a whole highlighted file will be returned. There
+If no **LINE** is passed then an entire highlighted file will be displayed.
+There
 is a replacement of the token above (on
 the [github.com](https://github.com/drugan/readmehelp#dynamic-php-snippets
 "README Help Github repository") shown as a raw token):
 
 ********************************************************************************
 
-@PHPFILE: readmehelp.module LINE:26 PADD:7 :PHPFILE@
+@PHPFILE: readmehelp.module LINE:29 PADD:8 :PHPFILE@
 
 ********************************************************************************
 
@@ -354,32 +353,26 @@ the [github.com](https://github.com/drugan/readmehelp#dynamic-php-snippets
 
 *README Help* module has its own [filter/tips#readmehelp-filter](#0
 "markdown text filter") which could be used for creating
-[admin/config/content/formats#](#0 " Drupal text formats"). So, users can
+[/admin/config/content/formats/add#](#0 " Drupal text formats"). So, users can
 implement easy to remember syntax for making their posts richer while not able
 to harm a site, whether intentionally or not.
-
-> Note that no any of the external libraries are used by the filter.
 
 ## Advanced README Help
 
 There might be cases when you still need to implement `hook_help()` and at the
 same time leverage the power of the *README Help* module. To restore the default
-behaviour you need additionally to implement dummy `your_module_readmehelp()`
-which disables automatic rendering of your module's *README* file and instead
-calls the regular `your_module_help()`.
+behaviour you need to remove your module from the list of supported modules and
+implement `your_module_help()` hook using tricks as in the snippet below:
 
-Copy the code from the snippet below, insert it into `your_module.module` file
-and edit for your needs.
 
 ********************************************************************************
 
-@PHPFILE: your_module.module.example LINE:33 PADD:33 :PHPFILE@
+@PHPFILE: your_module.module.example LINE:22 PADD:30 :PHPFILE@
 
 ********************************************************************************
 
 ###### Module author:
 ```
   Vlad Proshin (drugan)
-  [proshins@gmail.com](proshins@gmail.com)
   [https://drupal.org/u/drugan](https://drupal.org/u/drugan)
 ```

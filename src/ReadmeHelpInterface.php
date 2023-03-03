@@ -10,6 +10,6 @@ interface ReadmeHelpInterface {
   /**
    * The versions of a README file by default converted by the filter.
    */
-  const READMEHELP_FILES = 'README.md, README.txt, README';
+  const READMEHELP_FILES = ['README.md', 'README.txt', 'README'];
 
 }

@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install and uninstall functions for the readmehelp module.
+ * Install, uninstall and update functions for the readmehelp module.
  */
 
 use Drupal\filter\Entity\FilterFormat;
@@ -24,5 +24,17 @@ function readmehelp_uninstall() {
     if ($filters->has('readmehelp_markdown')) {
       $filters->removeInstanceId('readmehelp_markdown');
     }
+  }
+}
+
+/**
+ * Create readmehelp_settings config.
+ */
+function readmehelp_update_8201() {
+  if (readmehelp_modules_installed(['readmehelp'], FALSE)) {
+    return t('Added the README Help module settings.');
+  }
+  else {
+    return t('Saving the README Help module settings has failed. Set them manually on the module configuration form.');
   }
 }
