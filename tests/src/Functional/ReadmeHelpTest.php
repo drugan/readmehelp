@@ -7,7 +7,7 @@ use Drupal\Tests\BrowserTestBase;
 /**
  * Tests markdown into markup conversion.
  *
- * @group help
+ * @group readmehelp
  */
 class ReadmeHelpTest extends BrowserTestBase {
 

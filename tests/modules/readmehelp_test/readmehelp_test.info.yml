@@ -2,6 +2,6 @@ name: 'README Help test'
 type: module
 description: 'Tests markdown to markup conversion.'
 package: Testing
-core_version_requirement: ^8.8 || ^9
+core_version_requirement: ^9.5 || ^10
 dependencies:
   - drupal:readmehelp

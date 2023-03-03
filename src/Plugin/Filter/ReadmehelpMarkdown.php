@@ -56,7 +56,7 @@ class ReadmehelpMarkdown extends FilterBase implements ContainerFactoryPluginInt
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
+    return new self(
       $configuration,
       $plugin_id,
       $plugin_definition,
@@ -502,7 +502,7 @@ class ReadmehelpMarkdown extends FilterBase implements ContainerFactoryPluginInt
     return preg_replace_callback('/(\s)(_[^_]*?_)/', function ($matches) {
       $match = '';
       if ($match = !empty($matches[2]) ? $matches[2] : '') {
-        $char = isset($matches[3]) ? $matches[3] : '';
+        $char = $matches[3] ?? '';
         $match = "$matches[1]<em>" . str_replace('_', '', $match) . "</em>$char";
       }
       return $match;
@@ -522,7 +522,7 @@ class ReadmehelpMarkdown extends FilterBase implements ContainerFactoryPluginInt
     return preg_replace_callback('/(\s)(__[^_]*?__)/', function ($matches) {
       $match = '';
       if ($match = !empty($matches[2]) ? $matches[2] : '') {
-        $char = isset($matches[3]) ? $matches[3] : '';
+        $char = $matches[3] ?? '';
         $match = "$matches[1]<strong>" . str_replace('_', '', $match) . "</strong>$char";
       }
       return $match;
@@ -562,7 +562,9 @@ class ReadmehelpMarkdown extends FilterBase implements ContainerFactoryPluginInt
     return preg_replace_callback('/(```\w*)[^`].*?[^`](```)/xs', function ($matches) {
       $match = '';
       if ($match = !empty($matches[2]) ? $matches[0] : '') {
-        $match = "<pre><code class=\"code--multiline\">" . str_replace([$matches[1], $matches[2]], '', $match) . "</code></pre>";
+        $match = "<pre><code class=\"code--multiline\">" .
+          str_replace([$matches[1], $matches[2]], '', $match) .
+          "</code></pre>";
       }
       return $match;
     }, $text);
@@ -601,7 +603,7 @@ class ReadmehelpMarkdown extends FilterBase implements ContainerFactoryPluginInt
    */
   public function convertMarkdownImage($text, $host, $path) {
     $parts = explode('?', $path);
-    $path = isset($parts[0]) ? $parts[0] : 'NOT-A-PATH';
+    $path = $parts[0] ?? 'NOT-A-PATH';
     $pattern = '/(!\[((?>[^\[\]]+|\[\])*)\]\s?\([ \n]*(?:<(\S*)>|((?>[^()\s]+|\((?>\)))*))[ \n]*(([\'"])(.*?)\6[ \n]*)?\))/xs';
 
     return preg_replace_callback($pattern, function ($matches) use ($host, $path) {
@@ -647,10 +649,10 @@ class ReadmehelpMarkdown extends FilterBase implements ContainerFactoryPluginInt
     return preg_replace_callback($pattern, function ($matches) use ($host) {
       $text  = $matches[2];
       $parts = explode('?', $text);
-      $text  = isset($parts[0]) ? $parts[0] : 'NOT-A-TEXT';
+      $text  = $parts[0] ?? 'NOT-A-TEXT';
       $url   = $matches[3] == '' ? $matches[4] : $matches[3];
       $parts = explode('?', $url);
-      $url   = isset($parts[0]) ? $parts[0] : 'NOT-A-URL';
+      $url   = $parts[0] ?? 'NOT-A-URL';
       $title = empty($matches[7]) ? $text : $matches[7];
       if (preg_match('{^.*[#].*}', $text)) {
         $parts = explode('?', $text);

@@ -39,10 +39,13 @@ function readmehelp_converter_service($module_name = NULL, $file_path = NULL) {
  * Implements hook_system_info_alter().
  */
 function readmehelp_form_system_modules_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $readmehelp_modules = \Drupal::config('readmehelp.settings')
+    ->get('readmehelp_modules');
+
   foreach ($form['modules'] as $package => $modules) {
     if (is_array($modules)) {
       foreach ($modules as $module => $data) {
-        if (is_array($data) && (isset($data['#requires']['readmehelp']) || $module == 'readmehelp')) {
+        if (in_array($module, $readmehelp_modules)) {
           $help = t('README Help');
           $form['modules'][$package][$module]['links']['help'] = [
             '#type' => 'link',
@@ -59,4 +62,38 @@ function readmehelp_form_system_modules_alter(&$form, FormStateInterface $form_s
       }
     }
   }
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function readmehelp_modules_installed($modules, $is_syncing) {
+  $readmehelp_modules = $hook_help = [];
+  $module_handler = \Drupal::moduleHandler();
+
+  $module_handler->invokeAllWith(
+    'help',
+    function (callable $hook, string $machine_name) use (&$hook_help) {
+      $hook_help[$machine_name] = $machine_name;
+    }
+  );
+
+  if (in_array('readmehelp', $modules)) {
+    $modules = array_keys($module_handler->getModuleList());
+  }
+
+  foreach ($modules as $machine_name) {
+    if (!isset($hook_help[$machine_name])) {
+      $readmehelp_modules[] = $machine_name;
+    }
+  }
+
+  if (empty($readmehelp_modules)) {
+    return;
+  }
+
+  $config = \Drupal::configFactory()->getEditable('readmehelp.settings');
+  $modules = $config->get('readmehelp_modules') ?? [];
+  $readmehelp_modules = array_merge($modules, $readmehelp_modules);
+  $config->set('readmehelp_modules', $readmehelp_modules)->save();
 }

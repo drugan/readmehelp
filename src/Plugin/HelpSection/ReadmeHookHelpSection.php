@@ -2,12 +2,12 @@
 
 namespace Drupal\readmehelp\Plugin\HelpSection;
 
-use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Link;
 use Drupal\help\Plugin\HelpSection\HookHelpSection;
 use Drupal\readmehelp\ReadmeHelpInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 
 /**
  * Provides the module topics list section for the help page.
@@ -21,11 +21,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ReadmeHookHelpSection extends HookHelpSection implements ReadmeHelpInterface {
 
   /**
-   * The module extension list.
+   * The config factory.
    *
-   * @var \Drupal\Core\Extension\ModuleExtensionList
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
-  protected $moduleExtensionList;
+  protected $configFactory;
 
   /**
    * Constructs a HookHelpSection object.
@@ -38,24 +38,24 @@ class ReadmeHookHelpSection extends HookHelpSection implements ReadmeHelpInterfa
    *   The plugin implementation definition.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler service.
-   * @param \Drupal\Core\Extension\ModuleExtensionList $module_extension_list
-   *   The module extension list.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ModuleHandlerInterface $module_handler, ModuleExtensionList $module_extension_list) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ModuleHandlerInterface $module_handler, ConfigFactoryInterface $config_factory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $module_handler);
-    $this->moduleExtensionList = $module_extension_list;
+    $this->configFactory = $config_factory;
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
+    return new self(
       $configuration,
       $plugin_id,
       $plugin_definition,
       $container->get('module_handler'),
-      $container->get('extension.list.module')
+      $container->get('config.factory')
     );
   }
 
@@ -64,6 +64,9 @@ class ReadmeHookHelpSection extends HookHelpSection implements ReadmeHelpInterfa
    */
   public function listTopics() {
     $dirs = $this->moduleHandler->getModuleDirectories();
+    $readmehelp_modules = $this->configFactory
+      ->get('readmehelp.settings')
+      ->get('readmehelp_modules');
 
     $hook_help = [];
     $this->moduleHandler->invokeAllWith(
@@ -77,11 +80,8 @@ class ReadmeHookHelpSection extends HookHelpSection implements ReadmeHelpInterfa
 
     foreach ($this->moduleHandler->getModuleList() as $name => $module) {
       $file = FALSE;
-      $self = $name == 'readmehelp';
-      $extension_info = $this->moduleExtensionList->getExtensionInfo($name);
-      $dependencies = $extension_info['dependencies'];
-      if (in_array('readmehelp', $dependencies) || in_array('drupal:readmehelp', $dependencies) || $self) {
-        foreach (explode(', ', static::READMEHELP_FILES) as $readme) {
+      if (in_array($name, $readmehelp_modules)) {
+        foreach (static::READMEHELP_FILES as $readme) {
           if ($file = file_exists("$dirs[$name]/$readme")) {
             break;
           }

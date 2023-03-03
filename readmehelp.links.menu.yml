@@ -1,0 +1,8 @@
+readmehelp.settings:
+  title: README Help
+  description: List of modules using README Help
+  parent: system.admin_config_ui
+  route_name: readmehelp.settings
+  weight: 10
+
+
